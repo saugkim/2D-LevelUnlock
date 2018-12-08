@@ -31,6 +31,11 @@ public class LevelManager : MonoBehaviour
 
     int levelIndex;
 
+    private void Awake()
+    {
+        Debug.Log("Is It First TIme? " + PlayerPrefs.GetInt("FIRSTTIMEOPENING"));
+        DataMove();
+    }
 
     private void Start()
     {
@@ -41,8 +46,6 @@ public class LevelManager : MonoBehaviour
         for (int i = 0; i < levelButtons.Count; i++)
         {
             levelButtons[i].GetComponent<LevelButton>().levelText.text = (i+1).ToString();
-
-            Debug.Log(levels[i].Stars);
 
             if (levels[i].IsLocked == 1)
             {
@@ -73,7 +76,6 @@ public class LevelManager : MonoBehaviour
                     levelButtons[i].GetComponent<LevelButton>().stars[j].SetActive(true);
                 }
             }
-
             else
             {
                 return;
@@ -91,11 +93,36 @@ public class LevelManager : MonoBehaviour
         CancelAndCloseButton.onClick.AddListener(CancelAndClose);
     }
 
+    private void DataMove()
+    {
+
+        TextAsset txtAsset = (TextAsset)Resources.Load("LevelDatabase", typeof(TextAsset));
+        string tileFile = txtAsset.text;
+
+        if (PlayerPrefs.GetInt("FIRSTTIMEOPENING", 1) == 1)
+        {
+            Debug.Log("First Time Opening");
+
+            PlayerPrefs.SetInt("FIRSTTIMEOPENING", 0);
+
+            FileStream fs = new FileStream(Application.persistentDataPath + "/LevelDatabase.json", FileMode.Create);
+            fs.Close();
+
+            File.WriteAllText(Application.persistentDataPath + "/LevelDatabase.json", tileFile);
+
+        }
+        else
+        {
+            return;
+        }
+        
+    }
+
     private void CreateLevelList()
     {
         LevelContainer levelContainer = new LevelContainer();
 
-        string jsondata = File.ReadAllText(Application.dataPath + "/StreamingAssets/LevelDatabase.json");
+        string jsondata = File.ReadAllText(Application.persistentDataPath + "/LevelDatabase.json");
         levelContainer = JsonMapper.ToObject<LevelContainer>(jsondata);
 
         for (int i = 0; i < levelContainer.levelList.Count; i++)
@@ -132,5 +159,4 @@ public class LevelManager : MonoBehaviour
         questText.text = "Go To Level " + index ;
         PlayerPrefs.SetInt("Level Index", levelIndex);
     }
-
 }

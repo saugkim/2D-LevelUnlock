@@ -57,7 +57,7 @@ public class GamePlay : MonoBehaviour
     {
         LevelContainer levelContainer = new LevelContainer();
 
-        string jsonData = File.ReadAllText(Application.dataPath + "/StreamingAssets/LevelDatabase.json");
+        string jsonData = File.ReadAllText(Application.persistentDataPath + "/LevelDatabase.json");
         levelContainer = JsonMapper.ToObject<LevelContainer>(jsonData);
 
         Level tempLevel = levelContainer.levelList.Find(x => x.LevelIndex == currentLevelIndex);
@@ -65,13 +65,13 @@ public class GamePlay : MonoBehaviour
         tempLevel.Stars = stars; 
 
         string json = JsonMapper.ToJson(levelContainer);
-        File.WriteAllText(Application.streamingAssetsPath + "/LevelDatabase.json", json);
+        File.WriteAllText(Application.persistentDataPath + "/LevelDatabase.json", json);
     }
 
     void UpdateUnlockState()
     {
         LevelContainer levelContainer = new LevelContainer();
-        string jsonData = File.ReadAllText(Application.dataPath + "/StreamingAssets/LevelDatabase.json");
+        string jsonData = File.ReadAllText(Application.persistentDataPath + "/LevelDatabase.json");
         levelContainer = JsonMapper.ToObject<LevelContainer>(jsonData);
 
         Level tempLevel = levelContainer.levelList.Find(x => x.LevelIndex == (currentLevelIndex + 1));
@@ -79,6 +79,6 @@ public class GamePlay : MonoBehaviour
         tempLevel.IsLocked = 0; //Now next level IsLocked is false (set as 0) eli, its unlocked
 
         string json = JsonMapper.ToJson(levelContainer);
-        File.WriteAllText(Application.streamingAssetsPath + "/LevelDatabase.json", json);
+        File.WriteAllText(Application.persistentDataPath + "/LevelDatabase.json", json);
     }
 }
