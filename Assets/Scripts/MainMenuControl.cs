@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 
 public class MainMenuControl : MonoBehaviour {
 
     [SerializeField]
-    Button GoToMapScene;
+    Button GoToMapSceneButton;
+    [SerializeField]
+    Button ResetGameButton;
     [SerializeField]
     GameObject LoadingPanel;
 
@@ -18,7 +21,8 @@ public class MainMenuControl : MonoBehaviour {
 	void Start ()
     {
         LoadingPanel.SetActive(false);
-        GoToMapScene.onClick.AddListener(GoToMap);
+        GoToMapSceneButton.onClick.AddListener(GoToMap);
+        ResetGameButton.onClick.AddListener(ResetGame);
         mapSceneIndex = 1;
 	}
 
@@ -27,4 +31,14 @@ public class MainMenuControl : MonoBehaviour {
         LoadingPanel.SetActive(true);
         SceneManager.LoadScene(mapSceneIndex, LoadSceneMode.Single);
     }    
+
+    void ResetGame()
+    {
+
+        TextAsset txtAsset = (TextAsset)Resources.Load("LevelDatabase", typeof(TextAsset));
+        string tileFile = txtAsset.text;
+
+        File.WriteAllText(Application.persistentDataPath + "/LevelDatabase.json", tileFile);
+
+    }
 }

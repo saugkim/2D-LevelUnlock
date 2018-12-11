@@ -50,6 +50,7 @@ public class LevelManager : MonoBehaviour
             if (levels[i].IsLocked == 1)
             {
                 levelButtons[i].GetComponent<Button>().interactable = false;
+                levelButtons[i].transform.GetChild(2).gameObject.SetActive(true);
                 foreach (var item in levelButtons[i].GetComponent<LevelButton>().stars)
                 {
                     item.SetActive(false);
@@ -58,6 +59,7 @@ public class LevelManager : MonoBehaviour
             else if (levels[i].IsLocked == 0 && levels[i].Stars == 0)
             {
                 levelButtons[i].GetComponent<Button>().interactable = true;
+                levelButtons[i].transform.GetChild(2).gameObject.SetActive(false);
                 foreach (var item in levelButtons[i].GetComponent<LevelButton>().stars)
                 {
                     item.SetActive(false);
@@ -66,6 +68,7 @@ public class LevelManager : MonoBehaviour
             else if (levels[i].IsLocked == 0 && levels[i].Stars > 0)
             {
                 levelButtons[i].GetComponent<Button>().interactable = true;
+                levelButtons[i].transform.GetChild(2).gameObject.SetActive(false);
 
                 foreach (var item in levelButtons[i].GetComponent<LevelButton>().stars)
                 {

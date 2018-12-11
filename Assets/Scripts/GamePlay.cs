@@ -62,7 +62,11 @@ public class GamePlay : MonoBehaviour
 
         Level tempLevel = levelContainer.levelList.Find(x => x.LevelIndex == currentLevelIndex);
 
-        tempLevel.Stars = stars; 
+        if (tempLevel.Stars <= stars)
+        {
+            tempLevel.Stars = stars;
+        }
+        
 
         string json = JsonMapper.ToJson(levelContainer);
         File.WriteAllText(Application.persistentDataPath + "/LevelDatabase.json", json);
